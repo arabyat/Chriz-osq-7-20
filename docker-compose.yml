@@ -4,8 +4,6 @@ services:
     container_name: app
     restart: always
     build: .
-    environment:
-      - MONGO_URI=mongodb://mongodb:27017/app
     ports:
       - "80:3000"
     links:
@@ -14,12 +12,18 @@ services:
       - somenet
   mongo:
     container_name: mongo
-    image: mongo
-    volumes:
-      - ./data:/data/db
+    image: 'docker.io/bitnami/mongodb:4.2-debian-10'
     ports:
-      - "27007:27017"
+      - "27017:27017"
     networks:
       - somenet
+    volumes:
+      - 'mongodb_data:/bitnami/mongodb'
+      - ./data:/data/db
+
+volumes:
+  mongodb_data:
+    driver: local
+
 networks:
   somenet:
